@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
+import os
 
 # Set page config
 st.set_page_config(page_title="Sales Analysis Dashboard", layout="wide")
@@ -14,20 +15,27 @@ st.title("📊 Sales Analysis Dashboard")
 @st.cache_data
 def load_data():
     try:
-        # Define file paths
+        # Define file paths relative to the Downloads directory
+        base_dir = os.path.expanduser("~/Downloads")
         files = {
-            'Palero': '/Users/mauri/Downloads/extracted_report_Palero/sales_analysis_Palero_20250121_092409.csv',
-            'Rotonda': '/Users/mauri/Downloads/extracted_report_Rotonda/sales_analysis_Rotonda_20250121_092234.csv',
-            'Centro': '/Users/mauri/Downloads/extracted_report_Centro/sales_analysis_Centro_20250121_092059.csv'
+            'Palero': os.path.join(base_dir, 'extracted_report_Palero/sales_analysis_Palero_20250121_092409.csv'),
+            'Rotonda': os.path.join(base_dir, 'extracted_report_Rotonda/sales_analysis_Rotonda_20250121_092234.csv'),
+            'Centro': os.path.join(base_dir, 'extracted_report_Centro/sales_analysis_Centro_20250121_092059.csv')
         }
         
         # Read and combine all files
         dfs = []
         for location, file_path in files.items():
+            if not os.path.exists(file_path):
+                st.error(f"File not found: {file_path}")
+                continue
             df = pd.read_csv(file_path)
             df['Location'] = location
             dfs.append(df)
         
+        if not dfs:
+            return None
+            
         # Combine all dataframes
         combined_df = pd.concat(dfs, ignore_index=True)
         
