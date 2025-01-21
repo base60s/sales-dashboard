@@ -15,12 +15,14 @@ st.title("📊 Sales Analysis Dashboard")
 @st.cache_data
 def load_data():
     try:
-        # Define file paths relative to the Downloads directory
-        base_dir = os.path.expanduser("~/Downloads")
+        # Define file paths relative to the script directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        data_dir = os.path.join(script_dir, 'data')
+        
         files = {
-            'Palero': os.path.join(base_dir, 'extracted_report_Palero/sales_analysis_Palero_20250121_092409.csv'),
-            'Rotonda': os.path.join(base_dir, 'extracted_report_Rotonda/sales_analysis_Rotonda_20250121_092234.csv'),
-            'Centro': os.path.join(base_dir, 'extracted_report_Centro/sales_analysis_Centro_20250121_092059.csv')
+            'Palero': os.path.join(data_dir, 'sales_analysis_Palero_20250121_092409.csv'),
+            'Rotonda': os.path.join(data_dir, 'sales_analysis_Rotonda_20250121_092234.csv'),
+            'Centro': os.path.join(data_dir, 'sales_analysis_Centro_20250121_092059.csv')
         }
         
         # Read and combine all files
